@@ -12,13 +12,16 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import Price1 from '../containers/Page1';
+import About from '../containers/About';
 import Home from '../containers/Home';
 import Contact from '../containers/Contact';
+import Account from '../containers/Account';
+import Profile from '../containers/Profile';
+import Dashboard from '../containers/Dashboard';
 import Blog from '../containers/Blog';
 import NoPage from '../containers/Nopage';
    import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-const pages = ['Home', 'Price','Blog', 'Contact'];
+const pages = ['Home', 'About','Blog', 'Contact'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Header() {
@@ -155,7 +158,9 @@ function Header() {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                  <Typography textAlign="center">
+                    <Link to={setting}>{setting}</Link>                    
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -164,12 +169,16 @@ function Header() {
       </Container>
     </AppBar>
     
-    <Switch>
-        <Route  exact path="/Home" component={Home} />
-        <Route path="/Price" component={Price1} />
+    <Switch>        
+        
+        <Route path="/Home" component={Home} />
+        <Route path="/About" component={About} />
         <Route path="/Blog" component={Blog} />
         <Route path="/Contact" component={Contact} />
-        <Route path="*" element={<NoPage />} />
+        <Route path="/Profile" component={Profile} />
+        <Route path="/Dashoard" component={Dashboard} />
+        <Route path="/Account" component={Account} />
+        <Route path="*" component={NoPage}  />
       </Switch>
     </Router>
     </>

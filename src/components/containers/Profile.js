@@ -1,12 +1,11 @@
 import React from "react";
 import Main from '../Layout/Main'
 
-const Contact = () => {
+function Profile() {
   return (
     <Main>
-      <h1>This is the Contact page</h1>
+     Profile page 
     </Main>
   );
-};
-
-export default Contact;
+}
+export default Profile;
