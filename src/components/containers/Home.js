@@ -22,6 +22,8 @@ const Home = () => {
   const [email,setEmail]= useState('');
   const [password,setPassword]= useState('');
   const [premission,setPremission]= useState('');
+  const [fielderror,setFielderror]= useState('');
+  const [success,setSuccess]= useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -36,7 +38,15 @@ const Home = () => {
     };
      
     RegisterUser(object,(responce)=>{
-      console.log(responce.error)
+      if(responce.error && responce.error !=""){       
+          setFielderror(responce.error[0]);
+          // console.log(error)
+        }
+        // console.log(success,"****");
+        if(responce.success && responce.success){         
+          setSuccess(responce.success);
+          console.log(responce,"*****")
+        }
     });
 
   };
@@ -55,7 +65,7 @@ const Home = () => {
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
-          </Avatar>
+          </Avatar><>{success && success}</>
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
@@ -63,12 +73,14 @@ const Home = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  error ={fielderror.firstName && fielderror.firstName?true:false}  
                   autoComplete="given-name"
                   name="firstName"
                   value={firstName}
                   required
                   fullWidth
                   id="firstName"
+                  helperText={fielderror.firstName && fielderror.firstName}
                   onChange={(event, value) => { 
                     setFirstName(event.target.value.trim())
                   }}
@@ -78,11 +90,13 @@ const Home = () => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  error ={fielderror.lastName && fielderror.lastName?true:false}
                   required
                   fullWidth
                   id="lastName"
                   value={lastName}
                   label="Last Name"
+                  helperText={fielderror.lastName && fielderror.lastName}
                   onChange={(event, value) => {
                     setLastName(event.target.value.trim())
                   }}
@@ -92,6 +106,7 @@ const Home = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  error ={fielderror.email && fielderror.email?true:false}
                   required
                   fullWidth
                   id="email"
@@ -100,18 +115,21 @@ const Home = () => {
                     setEmail(event.target.value.trim())
                   }}
                   label="Email Address"
+                  helperText={fielderror.email && fielderror.email}
                   name="email"
                   autoComplete="email"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  error ={fielderror.password && fielderror.password?true:false}
                   required
                   fullWidth
                   name="password"
                   label="Password"
                   type="password"
                   value={password}
+                  helperText={fielderror.password && fielderror.password}
                   onChange={(event, value) => {
                     setPassword(event.target.value)
                   }}
