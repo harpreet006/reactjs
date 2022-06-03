@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import About from '../containers/About';
+import SignIn from '../containers/SignIn';
 import Home from '../containers/Home';
 import Contact from '../containers/Contact';
 import Account from '../containers/Account';
@@ -176,7 +177,8 @@ function Header() {
         <Route path="/Blog" component={Blog} />
         <Route path="/Contact" component={Contact} />
         <Route path="/Profile" component={Profile} />
-        <Route path="/Dashoard" component={Dashboard} />
+        <Route path="/Dashboard" component={Dashboard} />
+        <Route path="/Login" component={SignIn} />
         <Route path="/Account" component={Account} />
         <Route path="*" component={NoPage}  />
       </Switch>

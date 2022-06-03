@@ -12,6 +12,7 @@ const {connection} = require('../services/db');
 router.get('/getusers',userController.getUsers);
 router.post('/adduser',userController.registerForm);
 router.post('/deleteUser',userController.deleteUser);
+router.post('/userLogin',userController.userLogin);
 /*router.get('/login',userController.loginForm);
 router.post('/login',userController.userLogin);
 router.post('/logout',userController.userLogout);

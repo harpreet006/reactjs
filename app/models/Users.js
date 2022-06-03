@@ -14,11 +14,14 @@ class Users{
 	}
 
 	deleteUser(userId){
-		console.log(userId)
-		return false;
-		let sql = `SELECT * FROM users`;
+		let sql = `DELETE FROM users WHERE id=${userId}`;
 		return sql;
 	}
+	userLogin(email,password){
+		let sql = `SELECT * FROM users WHERE email='${email}'`;
+		return sql;
+	}
+	
 
 	
 	

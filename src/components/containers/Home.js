@@ -9,6 +9,8 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
+import Collapse from '@mui/material/Collapse';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -24,6 +26,7 @@ const Home = () => {
   const [premission,setPremission]= useState('');
   const [fielderror,setFielderror]= useState('');
   const [success,setSuccess]= useState('');
+  const [msgdisplay,setMsgdisplay] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -45,6 +48,7 @@ const Home = () => {
         // console.log(success,"****");
         if(responce.success && responce.success){         
           setSuccess(responce.success);
+          setMsgdisplay(true);
           console.log(responce,"*****")
         }
     });
@@ -55,6 +59,7 @@ const Home = () => {
       <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
+
         <Box
           sx={{
             marginTop: 8,
@@ -63,9 +68,11 @@ const Home = () => {
             alignItems: 'center',
           }}
         >
+        <><Collapse in={msgdisplay}>
+    {success && success?(<Alert  onClose={() => setMsgdisplay(false)} severity="success">{success && success}</Alert>):''}</Collapse></>
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
-          </Avatar><>{success && success}</>
+          </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
@@ -159,7 +166,7 @@ const Home = () => {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link  href="/Login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
