@@ -13,6 +13,7 @@ router.get('/getusers',userController.getUsers);
 router.post('/adduser',userController.registerForm);
 router.post('/deleteUser',userController.deleteUser);
 router.post('/userLogin',userController.userLogin);
+router.post('/forgotPassword',userController.forgotPassword);
 /*router.get('/login',userController.loginForm);
 router.post('/login',userController.userLogin);
 router.post('/logout',userController.userLogout);

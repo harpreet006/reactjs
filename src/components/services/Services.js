@@ -4,19 +4,25 @@ const base_Url='http://localhost:8000/';
 export async function RegisterUser(params,callback) {
 
     if(params.firstName==""){    
-        callback({'error':[{firstName:"First Name is  empty"}]});
+        callback({'error':[{firstName:"Please enter your first name"}]});
         return false;
     }
     if(params.lastName==""){
-        callback({'error':[{lastName:"Last Name is empty"}]}); 
+        callback({'error':[{lastName:"Please enter your last name"}]}); 
         return false;
     }
     if(params.email==""){
-        callback({'error':[{email:"Email is empty"}]});
+        callback({'error':[{email:"Please enter your email address"}]});
         return false;
+    }else{
+        const regex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        if(regex.test(params.email) === false){
+            callback({'error':[{email:"Please enter a valid email address"}]});
+        return false;
+        }
     }
     if(params.password==""){
-        callback({'error':[{password:"Password is empty"}]});
+        callback({'error':[{password:"Please enter your password"}]});
         return false;
     }
 
@@ -56,21 +62,53 @@ export async function DeleteUser(userId,callback) {
 
 
 
-export async function UserLogin(params,callback) {
+
+export async function ForgotPassword(params,callback) {
     if(params.email==""){    
-        callback({'error':[{email:"Email is  empty"}]});
+        callback({'error':[{email:"Please enter your email address"}]});
         return false;
+    }else{
+        const regex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        if(regex.test(params.email) === false){
+            callback({'error':[{email:"Please enter a valid email address"}]});
+            return false;
+        }
     }
+
+    await axios.post(base_Url+'forgotPassword',params, {
+        headers: { 'Content-Type': 'application/json' }
+    }).then(response =>{
+        callback(response.data);
+    }).catch(err =>{
+        callback({'error':'error','message':err});
+        console.log(err);
+    })
+
+}
+
+
+export async function UserLogin(params,callback) {
+    console.log(params.email,"sdfsdf")
+    if(params.email==""){       
+        callback({'error':[{email:"Please enter your email address"}]});
+        return false;
+    }else{
+        const regex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        if(regex.test(params.email) === false){
+            callback({'error':[{email:"Please enter a valid email address"}]});
+            return false;
+        }
+    }
+    // console.log('***');
     if(params.password==""){    
-        callback({'error':[{password:"Password is  empty"}]});
+        callback({'error':[{password:"Please enter your password"}]});
         return false;
     }
 
     await axios.post(base_Url+'userLogin',params, {
         headers: { 'Content-Type': 'application/json' }
     }).then(response =>{
-        console.log(response,"ddddddddd")
-        callback({'result':response.result,'message':response.data.message});
+        callback(response.data);
     }).catch(err =>{
         callback({'error':'error','message':err});
         console.log(err);

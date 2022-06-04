@@ -1,19 +1,20 @@
 const jwt = require('jsonwebtoken');
+const config = process.env;
 
-module.exports = (req, res, next) => {
-  try {
-    console.log(req.session.loggedin,req.session.token,"********&&&&&&&*********");
-    const token =req.session.token;
-    const decodedToken = jwt.verify(token, process.env.secret_Code);
-    const userId = decodedToken.user_id;
-    if (req.body.userId && req.body.userId !== userId) {
-      console.log('redirect Invalid');
-      res.redirect('/login');
-    } else {
-      next();
-    }
-  } catch {
-    console.log('redirect Auth')
-    res.redirect('/login');    
+const verifyToken = (req, res, next) => {
+  const token =
+    req.body.token || req.query.token || req.headers["x-access-token"];
+
+  if (!token) {
+    return res.status(403).send("A token is required for authentication");
   }
-}
+  try {
+    const decoded = jwt.verify(token, config.TOKEN_KEY);
+    req.user = decoded;
+  } catch (err) {
+    return res.status(401).send("Invalid Token");
+  }
+  return next();
+};
+
+module.exports = verifyToken;

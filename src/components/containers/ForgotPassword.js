@@ -16,12 +16,10 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { UserLogin } from '../services/Services';
+import { ForgotPassword } from '../services/Services';
 
-const SignIn = ()=> {
+const ForgotPasswordFun = ()=> {
   const [email,setEmail] = useState('');
-  const [password,setPassword] = useState('');
-  const [remember,setRemember] = useState('');
   const [fielderror,setFielderror]= useState('');
   const [showmsg,setShowmsg] = useState('');
   const [msgdisplay,setMsgdisplay] = useState(false);
@@ -31,35 +29,29 @@ const SignIn = ()=> {
   const handleSubmit=(event)=>{
     event.preventDefault();
     const object ={
-      email:email,
-      password:password
+      email:email
     }
     
-    UserLogin(object,(responce)=>{
+    ForgotPassword(object,(responce)=>{
       /*validation message error display*/
-      if(responce.error && responce.error !="undefined"){  
-        setFielderror(responce.error[0]); 
+      if(responce.error && responce.error !=""){       
+        setFielderror(responce.error[0]);
         setMsgdisplay(false);
         return false;
       }
       setFielderror('');
+      setShowmsg(responce.message)
+      setMsgdisplay(true);
+      setAlerttype(responce.status);            
       /*validation message error display*/ 
-      if(responce.status=="error"){
-        setShowmsg(responce.message)
-        setMsgdisplay(true);
-        setAlerttype(responce.status);
-      }
-      if(responce.status=="success"){
-        setShowmsg(responce.message)
-        setMsgdisplay(true);
-        setAlerttype(responce.status);
-        localStorage.setItem('token', responce.result.token);       
-      }
+
+
     })
+    
+
   }
   useEffect(() => {
-    const loggedInUser = localStorage.getItem("token");
-     // alert(loggedInUser)
+    
   }, []);
   
 
@@ -77,12 +69,9 @@ const SignIn = ()=> {
           }}
         >
         <><Collapse in={msgdisplay}>
-    {showmsg && showmsg?(<Alert  onClose={() => setMsgdisplay(false)} severity={alerttype && alerttype}>{showmsg && showmsg}</Alert>):''}</Collapse></>
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
+        {showmsg && showmsg?(<Alert  onClose={() => setMsgdisplay(false)} severity={alerttype && alerttype}>{showmsg && showmsg}</Alert>):''}</Collapse></>
           <Typography component="h1" variant="h5">
-            Sign in
+            Forgot Password
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -100,45 +89,20 @@ const SignIn = ()=> {
               autoComplete="email"
               autoFocus
             />
-            <TextField
-              error ={fielderror.password && fielderror.password?true:false}
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              helperText={fielderror.password && fielderror.password}
-              id="password"
-              onChange={(event, value) => {
-                setPassword(event.target.value)
-              }}
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              onClick={(event, value) => {                 
-                setRemember(event.target.value)
-              }}
-              label="Remember me"
-            />
+             
+            
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Send
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="/forgot-password" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
+            <Grid container>               
               <Grid item>
                 <Link href="/Home" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  {"Sign Up"}
                 </Link>
               </Grid>
             </Grid>
@@ -149,4 +113,4 @@ const SignIn = ()=> {
     </>
   );
 }
-export default SignIn;
+export default ForgotPasswordFun;

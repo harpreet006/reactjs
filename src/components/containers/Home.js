@@ -43,6 +43,7 @@ const Home = () => {
     RegisterUser(object,(responce)=>{
       if(responce.error && responce.error !=""){       
           setFielderror(responce.error[0]);
+          setMsgdisplay(false);
           // console.log(error)
         }
         // console.log(success,"****");
@@ -50,6 +51,7 @@ const Home = () => {
           setSuccess(responce.success);
           setMsgdisplay(true);
           console.log(responce,"*****")
+          setFielderror('');
         }
     });
 

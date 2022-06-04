@@ -21,6 +21,13 @@ class Users{
 		let sql = `SELECT * FROM users WHERE email='${email}'`;
 		return sql;
 	}
+
+	forgotPassword(email,password){
+		let sql = `SELECT * FROM users WHERE email='${email}'`;
+		return sql;
+	}
+
+	
 	
 
 	

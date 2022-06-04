@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import About from '../containers/About';
 import SignIn from '../containers/SignIn';
+import ForgotPasswordFun from '../containers/ForgotPassword';
 import Home from '../containers/Home';
 import Contact from '../containers/Contact';
 import Account from '../containers/Account';
@@ -22,8 +23,8 @@ import Dashboard from '../containers/Dashboard';
 import Blog from '../containers/Blog';
 import NoPage from '../containers/Nopage';
    import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-const pages = ['Home', 'About','Blog', 'Contact'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['Signup', 'About','Blog', 'Contact'];
+const settings = ['Login'];
 
 function Header() {
 	 const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -172,13 +173,14 @@ function Header() {
     
     <Switch>        
         
-        <Route path="/Home" component={Home} />
+        <Route path="/Signup" component={Home} />
         <Route path="/About" component={About} />
         <Route path="/Blog" component={Blog} />
         <Route path="/Contact" component={Contact} />
         <Route path="/Profile" component={Profile} />
         <Route path="/Dashboard" component={Dashboard} />
         <Route path="/Login" component={SignIn} />
+        <Route path="/Forgot-password" component={ForgotPasswordFun} />
         <Route path="/Account" component={Account} />
         <Route path="*" component={NoPage}  />
       </Switch>

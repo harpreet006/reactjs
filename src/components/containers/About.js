@@ -55,12 +55,10 @@ const About = ()=> {
 
   useEffect(() => {
     GetUserList((responce)=>{
-    if(responce.success && responce.success){
-      console.log(responce.success,"12*****")
-      setRow(responce.success);
-    }
-    
-    
+      if(responce.success && responce.success){
+        console.log(responce.success,"12*****")
+        setRow(responce.success);
+      }    
     });
   }, []);
   
