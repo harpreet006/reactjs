@@ -1,4 +1,5 @@
 import React , { useEffect, useState }from "react";
+import { useHistory } from "react-router-dom";
 import Main from '../Layout/Main';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
@@ -18,6 +19,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { UserLogin } from '../services/Services';
 
+
 const SignIn = ()=> {
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
@@ -27,6 +29,7 @@ const SignIn = ()=> {
   const [msgdisplay,setMsgdisplay] = useState(false);
   const [alerttype,setAlerttype] = useState(false);
   const theme = createTheme();
+  const history = useHistory();
 
   const handleSubmit=(event)=>{
     event.preventDefault();
@@ -53,7 +56,8 @@ const SignIn = ()=> {
         setShowmsg(responce.message)
         setMsgdisplay(true);
         setAlerttype(responce.status);
-        localStorage.setItem('token', responce.result.token);       
+        localStorage.setItem('token', responce.result.token);
+        history.push('/dashboard');
       }
     })
   }

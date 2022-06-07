@@ -75,7 +75,6 @@ exports.forgotPassword = async (req,res,next) => {
 
 
 exports.getUsers = async (req,res,next) => {
-    console.log('calling...')
     connection.query(userModel.getUsers(), (err,result) => {
         if(err)
             console.log(err);

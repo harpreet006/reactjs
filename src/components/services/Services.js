@@ -2,7 +2,6 @@ import React from "react";
 import axios from 'axios';
 const base_Url='http://localhost:8000/';
 export async function RegisterUser(params,callback) {
-
     if(params.firstName==""){    
         callback({'error':[{firstName:"Please enter your first name"}]});
         return false;
@@ -37,9 +36,10 @@ export async function RegisterUser(params,callback) {
 }
 
 
-export async function GetUserList(callback) {
+export async function GetUserList(header,callback) {
+    const AuthStr = 'Bearer ' + header;
     await axios.get(base_Url+'getusers', {
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json','authorization':AuthStr }
     }).then(response =>{
         callback({'success':response.data.success});
     }).catch(err =>{
@@ -49,9 +49,10 @@ export async function GetUserList(callback) {
 }
 
 
-export async function DeleteUser(userId,callback) {
+export async function DeleteUser(header,userId,callback) {
+    const AuthStr = 'Bearer ' + header;
     await axios.post(base_Url+'deleteUser',userId, {
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json','authorization':AuthStr }
     }).then(response =>{
         callback({'success':response.data.success,'message':response.data.message});
     }).catch(err =>{
