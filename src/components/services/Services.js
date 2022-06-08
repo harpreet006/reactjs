@@ -36,6 +36,33 @@ export async function RegisterUser(params,callback) {
 }
 
 
+export async function ProductAdd(params,callback) {
+    if(params.productName==""){    
+        callback({'error':[{productName:"Please enter your product name"}]});
+        return false;
+    }
+    if(params.productModel==""){
+        callback({'error':[{productModel:"Please enter model name"}]}); 
+        return false;
+    }
+    if(params.productPrice==""){
+        callback({'error':[{productPrice:"Please enter product price"}]});
+        return false;
+    }
+    console.log(params,'completed');
+    return false;
+     
+
+    await axios.post(base_Url+'adduser', params, {
+        headers: { 'Content-Type': 'application/json' }
+    }).then(response =>{
+        callback({'success':response.data.success});
+    }).catch(err =>{
+        callback({'error':err});
+        console.log(err);
+    })
+}
+
 export async function GetUserList(header,callback) {
     const AuthStr = 'Bearer ' + header;
     await axios.get(base_Url+'getusers', {

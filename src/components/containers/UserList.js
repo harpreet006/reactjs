@@ -30,23 +30,32 @@ const UserList = ()=> {
       width: 160
     },
     {
-      field: 'Route',
-      headerName: 'Action', 
+      field: 'Delete',
+      headerName: 'Delete', 
       width: 160,
-      renderCell: (params) => {
-     
-
-      return <Button onClick={(event) => {
-          handleClick(event, params);
-        }}
-      >Remove</Button>;
-    }
+        renderCell: (params) => {
+          return <Button onClick={(event) => {
+              removeClick(event, params);
+            }}
+          >Remove</Button>;
+      }
+    },
+    {
+      field: 'Edit',
+      headerName: 'Edit', 
+      width: 160,
+        renderCell: (params) => {
+          return <Button onClick={(event) => {
+              editClick(event, params);
+            }}
+          >Edit</Button>;
+      }
     }
   ];
   const tokenItem=localStorage.getItem('token');
 
-  const handleClick = (event, params) => {
-    confirm({ description: 'Are you sure you want to delete this item?!' })
+  const removeClick = (event, params) => {
+    confirm({ description: 'You want to delete this item?!' })
       .then((res) => { 
           event.stopPropagation();
           setLoading(true);
@@ -63,6 +72,10 @@ const UserList = ()=> {
           setLoading(false)
        });    
   };
+
+  const editClick = (event, params) => {
+    alert('This is edit click');
+  }
   const handleClose = () => {
     setOpen(false);
   };

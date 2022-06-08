@@ -57,7 +57,7 @@ const SignIn = ()=> {
         setMsgdisplay(true);
         setAlerttype(responce.status);
         localStorage.setItem('token', responce.result.token);
-        history.push('/dashboard');
+        history.push('/dashboard',responce.result.role);
       }
     })
   }
@@ -141,7 +141,7 @@ const SignIn = ()=> {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/Home" variant="body2">
+                <Link href="/Signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

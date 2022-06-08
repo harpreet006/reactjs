@@ -6,7 +6,7 @@ import Home from '../containers/Home';
 import Contact from '../containers/Contact';
 import Account from '../containers/Account';
 import Profile from '../containers/Profile';
-// import Dashboard from '../containers/Dashboard';
+import AddProduct from '../products/AddProduct';
 import UserList from '../containers/UserList';
 import Blog from '../containers/Blog';
 import NoPage from '../containers/Nopage';
@@ -15,8 +15,9 @@ import Protected from '../AuthProtected/Protected';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function Header() {
+  const localToken=localStorage.getItem('token');
 	useEffect (()=>{
-    console.log('')
+    // alert(localToken)
   })
   return (
   	<>
@@ -24,21 +25,17 @@ function Header() {
       <Navbar />    
       <Switch>  
 
-        <Route path="/Signup" component={Home} />
-        <Route path="/About" component={About} />
-        <Route path="/Blog" component={Blog} />
-        <Route path="/Contact" component={Contact} />        
-        <Route path="/Profile">
-          <Protected Com={Profile} />
-        </Route>
-        <Route path="/dashboard">
-          <Protected Com={UserList} />
-        </Route>
-        <Route path="/Login">
-          <Protected Com={SignIn} />
-        </Route>        
-        <Route path="/Forgot-password" component={ForgotPasswordFun} />
-        <Route path="/Account" component={Account} />
+        <Route path="/About" component={About} roles={['Admin','User']}  />
+        <Route path="/Blog" component={Blog}  roles={['Admin','User']} />
+        <Route path="/Contact" component={Contact}  />        
+        <Protected path="/Profile" component={Profile} type="private" roles={['Admin','User']} />
+        <Protected path="/dashboard" component={UserList} type="private" roles={['Admin']} /> 
+        <Protected path="/Account" component={Account} type="private" roles={['Admin','User']} />
+        <Protected path="/Signup" component={Home}  type="public"  roles={['Admin','User']} />
+        <Protected path="/Login" component={SignIn} type="public" roles={['Admin','User']} />       
+        <Protected path="/add-product" component={AddProduct} type="public" roles={['Admin','User']} />       
+        <Protected path="/Forgot-password" component={ForgotPasswordFun} type="public"  isAuthUser={localToken}  roles={['Admin','User']} />)        
+             
         <Route path="*" component={NoPage}  />
       </Switch>
     </Router>

@@ -5,7 +5,7 @@ class Users{
 	}
 
 	addUser(firstName,lastName,email,password,premission){
-		let sql = `INSERT INTO users (firstname,lastname,email,password,premission) VALUES ('${firstName}','${lastName}','${email}','${password}','${premission}')`;
+		let sql = `INSERT INTO users (firstname,lastname,email,password,premission,role) VALUES ('${firstName}','${lastName}','${email}','${password}','${premission}','User')`;
 		return sql;
 	}
 	getUsers(){
