@@ -33,7 +33,7 @@ function Header() {
         <Protected path="/Account" component={Account} type="private" roles={['Admin','User']} />
         <Protected path="/Signup" component={Home}  type="public"  roles={['Admin','User']} />
         <Protected path="/Login" component={SignIn} type="public" roles={['Admin','User']} />       
-        <Protected path="/add-product" component={AddProduct} type="public" roles={['Admin','User']} />       
+        <Protected path="/add-product" component={AddProduct} type="private"  />       
         <Protected path="/Forgot-password" component={ForgotPasswordFun} type="public"  isAuthUser={localToken}  roles={['Admin','User']} />)        
              
         <Route path="*" component={NoPage}  />

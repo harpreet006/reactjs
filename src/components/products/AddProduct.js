@@ -14,9 +14,10 @@ import Collapse from '@mui/material/Collapse';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { ProductAdd } from '../services/Services';
+import imageCompression from 'browser-image-compression';
+import { ProductAdd ,fileUploadToServer} from '../services/Services';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+// var FormData = require('form-data');
 const AddProduct = () => {
   const theme = createTheme();
   const [productName,setProductName]= useState('');
@@ -26,17 +27,44 @@ const AddProduct = () => {
   const [fielderror,setFielderror]= useState('');
   const [success,setSuccess]= useState('');
   const [msgdisplay,setMsgdisplay] = useState(false);
+  
+  const saveFile =(e) =>{
+    console.log(e.target.files[0].name)
 
-  const handleSubmit = (event) => {
+    setProductimage(e.target.files[0])
+  }
+
+   
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    const header=localStorage.getItem('token');
     const object={
       productName: productName,
       productModel: productModel,
       productPrice: productPrice,
       productimage: productimage
     };
-     
-    ProductAdd(object,(responce)=>{
+
+  console.log('originalFile instanceof Blob', object.productimage instanceof Blob); // true
+  console.log(`originalFile size ${object.productimage.size / 1024 / 1024} MB`);
+  try {
+    // console.log(object.productimage,"******")
+    const compressedFile = await imageCompression(object.productimage,);
+    // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+    // console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+    // console.log(compressedFile,"*********");
+    const token=localStorage.getItem('token');
+    const formData = new FormData()
+    formData.append('selectedFile', compressedFile)
+    // console.log(compressedFile,"uploadToServer")
+    await fileUploadToServer(token,formData); // write your own logic
+  } catch (error) {
+      console.log(error);
+  }
+
+ return false
+    // formData.append('file', productimage)
+    ProductAdd(header , object,(responce)=>{
       if(responce.error && responce.error !=""){       
           setFielderror(responce.error[0]);
           setMsgdisplay(false);
@@ -129,11 +157,8 @@ const AddProduct = () => {
                   fullWidth
                   name="productimage"
                   type="file"
-                  value={productimage}
                   helperText={fielderror.productimage && fielderror.productimage}
-                  onChange={(event, value) => {
-                    setProductimage(event.target.value)
-                  }}
+                  onChange={(e)=> saveFile(e)}
                   id="productimage"
                   autoComplete="productimage"
                 />

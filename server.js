@@ -18,18 +18,21 @@ global.__basedir = __dirname;
 app.use(urlencodedParser);
 app.use(express.json());
 const userModuleRoutes = require('./app/routes/user'); 
+const productModuleRoutes = require('./app/routes/product'); 
  
 
 // ///////////////////////////
 // Controllers or Routes
 // ///////////////////////////
-app.use(userModuleRoutes);/*
+
+app.use(userModuleRoutes);
+app.use(productModuleRoutes);
  
 
 // ///////////////////////////
 // Setup Server to start listening.
 // ///////////////////////////
-*/
+ 
 var server = app.listen(app.get('port'), function() {
 	console.log('Listening on port ' + app.get('port'));
 });

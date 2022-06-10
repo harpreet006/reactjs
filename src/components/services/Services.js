@@ -36,7 +36,15 @@ export async function RegisterUser(params,callback) {
 }
 
 
-export async function ProductAdd(params,callback) {
+export async  function fileUploadToServer(header,compressedFile){
+    const AuthStr = 'Bearer ' + header;
+    return axios.post(base_Url+'fileUpload', compressedFile, {
+       headers: { 'authorization':AuthStr }
+    });
+}
+
+
+export async function ProductAdd(header,params,callback) {
     if(params.productName==""){    
         callback({'error':[{productName:"Please enter your product name"}]});
         return false;
@@ -49,13 +57,13 @@ export async function ProductAdd(params,callback) {
         callback({'error':[{productPrice:"Please enter product price"}]});
         return false;
     }
-    console.log(params,'completed');
-    return false;
-     
-
-    await axios.post(base_Url+'adduser', params, {
-        headers: { 'Content-Type': 'application/json' }
+    console.log(params);
+    // return false;
+    const AuthStr = 'Bearer ' + header;
+    await axios.post(base_Url+'addproduct', params, {
+       headers: { 'Content-Type': 'multipart/form-data','authorization':AuthStr }
     }).then(response =>{
+
         callback({'success':response.data.success});
     }).catch(err =>{
         callback({'error':err});

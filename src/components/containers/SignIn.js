@@ -57,7 +57,7 @@ const SignIn = ()=> {
         setMsgdisplay(true);
         setAlerttype(responce.status);
         localStorage.setItem('token', responce.result.token);
-        history.push('/dashboard',responce.result.role);
+        history.push('/dashboard');
       }
     })
   }
