@@ -3,8 +3,13 @@ class Product{
 		 
 	}
 
-	addProducts(userId,productName,productModel,productPrice,productimage){
-		let sql = `INSERT INTO products_collection (userId,productName,productModel,productPrice,productimage) VALUES ('${userId}','${productName}','${productModel}','${productPrice}','${productimage}')`;
+	addProducts(userId,productName,productSlug,productModel,productPrice,productimage){
+		let sql = `INSERT INTO products_collection (userId,productName,productSlug,productModel,productPrice,productimage) VALUES ('${userId}','${productName}','${productSlug}','${productModel}','${productPrice}','${productimage}')`;
+		return sql;
+	}
+
+	SlugExist(slug){
+		let sql = `SELECT * FROM  products_collection WHERE 	productSlug='${slug}'`;
 		return sql;
 	}
 

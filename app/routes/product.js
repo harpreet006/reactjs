@@ -33,6 +33,7 @@ var upload = multer({
 router.post('/addproduct',verifyToken , productController.addProduct);
 router.post('/fileUpload',verifyToken ,upload.single('selectedFile'), productController.addProduct);
 router.get('/getproducts',verifyToken , productController.proListing);
+router.get('/singlePage',verifyToken , productController.singleProduct);
 router.post('/deleteProduct',verifyToken , productController.productRemove);
  
 module.exports = router;

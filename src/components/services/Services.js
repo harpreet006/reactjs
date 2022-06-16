@@ -41,7 +41,7 @@ export async  function fileUploadToServer(header,compressedFile,callback){
     await axios.post(base_Url+'fileUpload',compressedFile ,{
         headers: { 'Content-Type': 'application/json','authorization':AuthStr }
     }).then(response =>{
-        if(response.data.status="success"){
+        if(response.data.status=="success"){
             callback({'status':response.data.status,'message':response.data.message});
         }else{
             callback({'status':response.data.status,'message':response.data.message});
@@ -89,18 +89,20 @@ export async function GetUserList(header,callback) {
     })
 }
 
-export async function ViewProduct(header,userId,callback) {
+export async function ViewProduct(header,slug,callback) {
     const AuthStr = 'Bearer ' + header;
-    console.log(AuthStr)
-    // console.log(userId)
-   /* await axios.get(base_Url+'getusers', {
+    await axios.get(base_Url+'singlePage', {params: {slug:slug},
         headers: { 'Content-Type': 'application/json','authorization':AuthStr }
     }).then(response =>{
-        callback({'success':response.data.success});
+        if(response.data.status=="success"){
+            callback({'result':response.data.result,message:''});
+        }else{
+            callback({'result':null,message:response.data.message});
+        }
     }).catch(err =>{
-        callback({'error':err});
+        callback({'result':null,message:err})
         console.log(err);
-    })*/
+    })
 }
 
 export async function GetProductList(header,callback) {

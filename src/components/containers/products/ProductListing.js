@@ -1,5 +1,6 @@
 import React , { useEffect, useState } from "react";
 import { useConfirm } from 'material-ui-confirm';
+import { useHistory } from "react-router-dom";
 import Main from '../../Layout/Main';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
@@ -10,16 +11,17 @@ import { GetProductList, DeleteProduct ,ViewProduct } from '../../services/Servi
 
 const ProductListing = ()=> {
   const [row,setRow] = useState([]);
-   const confirm = useConfirm();
+  const history = useHistory();
+  const confirm = useConfirm();
   const [showmsg,setShowmsg] = useState('');
   const [loading,setLoading] = useState(false);
   const [msgdisplay,setMsgdisplay] = useState(false);
   const [open,setOpen] = useState(true);
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'productName', headerName: 'Product Name', width: 200,height: '500px' },
-    { field: 'productModel', headerName: 'Product Model', width: 200 },
-    { field: 'productPrice', headerName: 'Product Price', width: 200 ,height: '500px'},
+    { field: 'productName', headerName: 'Product Name', width: 200,height: 200 },
+    { field: 'productModel', headerName: 'Product Model', width: 200 ,height: 200},
+    { field: 'productPrice', headerName: 'Product Price', width: 200 ,height: 200},
     { field: 'productimage', headerName: 'Product Image',renderCell: (params)=>{
       return (  <div style={{height: "100%",width:"100%"}}>
         <img src={'product_images/'+params.row.productimage} alt={params.row.productimage} style={{height: "100%"}} /> </div>
@@ -70,9 +72,9 @@ const ProductListing = ()=> {
 
   const viewClick = (event, params) => {
     event.stopPropagation();
-    ViewProduct(tokenItem,{id:params.id},(responce)=>{
-
-    })
+    console.log(params.row.productSlug)
+    history.push('/Products/'+params.row.productSlug);
+    
   }
   const editClick = (event, params) => {
     alert('This is edit click');
@@ -81,6 +83,7 @@ const ProductListing = ()=> {
     setOpen(false);
   };
 
+ 
   useEffect(() => {
     GetProductList(tokenItem, (responce)=>{
       if(responce.result && responce.result){
@@ -102,7 +105,10 @@ const ProductListing = ()=> {
         id="_id"
         pageSize={5}
         rowsPerPageOptions={[5]}
-        loading={loading}       
+        loading={loading}     
+        sx={{
+        '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': { py: '10px' }
+      }}
       />
     </div>
     </Main>

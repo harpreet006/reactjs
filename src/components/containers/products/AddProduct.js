@@ -32,6 +32,7 @@ const AddProduct = () => {
   const [success,setSuccess]= useState('');
   const [spinner,setSpinner]= useState(false);
   const [msgdisplay,setMsgdisplay] = useState(false);
+  const [severity,setSeverity] = useState('success');
   
   const saveFile =(e) =>{
     // console.log(e.target.files[0].name);
@@ -42,57 +43,59 @@ const AddProduct = () => {
 
    
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    // return false;
-    const header=localStorage.getItem('token');
-    const object={
-      productName: productName,
-      productModel: productModel,
-      productPrice: productPrice,
-      productimage: productimage
-    };
-    if(object.productName==""){
-      setFielderror({productName:"Required field"});
-      return false;
-    }
-    if(object.productModel==""){
-      setFielderror({productModel:"Required field"});
-      return false;
-    }
-    if(object.productPrice==""){
-      setFielderror({productPrice:"Required field"});
-      return false;
-    }
-    if(imageset==false){
-      setFielderror({productimage:"Required field"});
-      return false;
-    }
-  setSpinner(true);
-  console.log('originalFile instanceof Blob', object.productimage instanceof Blob); // true
-  console.log(`originalFile size ${object.productimage.size / 1024 / 1024} MB`);
-  try {
-    // console.log(object.productimage,"******")
-    const compressedFile = await imageCompression(object.productimage);
-    const token=localStorage.getItem('token');
-    const formData = new FormData()
-    formData.append('selectedFile', compressedFile)
-    formData.append('productName', object.productName)
-    formData.append('productModel', object.productModel)
-    formData.append('productPrice', object.productPrice)
-    // return false;
-    fileUploadToServer(token,formData,(responce)=>{
-      setMsgdisplay(true)
-      if(responce.status=="success"){
-        // console.log("jksdfas")
-        setSuccess(responce.message)
-        history.push('/Products');
-      }else{
-        setSuccess(responce.message);
+      event.preventDefault();
+      // return false;
+      const header=localStorage.getItem('token');
+      const object={
+        productName: productName,
+        productModel: productModel,
+        productPrice: productPrice,
+        productimage: productimage
+      };
+      if(object.productName==""){
+        setFielderror({productName:"Required field"});
+        return false;
       }
-    });
-  } catch (error) {
+      if(object.productModel==""){
+        setFielderror({productModel:"Required field"});
+        return false;
+      }
+      if(object.productPrice==""){
+        setFielderror({productPrice:"Required field"});
+        return false;
+      }
+      if(imageset==false){
+        setFielderror({productimage:"Required field"});
+        return false;
+      }
+      setSpinner(true);
+      console.log('originalFile instanceof Blob', object.productimage instanceof Blob); // true
+      console.log(`originalFile size ${object.productimage.size / 1024 / 1024} MB`);
+    try {
+      // console.log(object.productimage,"******")
+      const compressedFile = await imageCompression(object.productimage);
+      const token=localStorage.getItem('token');
+      const formData = new FormData()
+      formData.append('selectedFile', compressedFile)
+      formData.append('productName', object.productName)
+      formData.append('productModel', object.productModel)
+      formData.append('productPrice', object.productPrice)
+      // return false;
+      fileUploadToServer(token,formData,(responce)=>{
+        setMsgdisplay(true)
+        setSpinner(false);
+        if(responce.status=="success"){
+          setSuccess(responce.message)
+          history.push('/Products');
+        }else{
+          setSeverity('error');
+          setSuccess(responce.message);
+        }
+      });
+    } catch (error) {
+      setSeverity('error');
       console.log(error);
-  }
+    }
   };
   return (
     <Main>
@@ -107,7 +110,7 @@ const AddProduct = () => {
           }}
         >
         <><Collapse in={msgdisplay}>
-    {success && success?(<Alert  onClose={() => setMsgdisplay(false)} severity="success">{success && success}</Alert>):''}</Collapse></>
+    {success && success?(<Alert  onClose={() => setMsgdisplay(false)} severity={severity}>{success && success}</Alert>):''}</Collapse></>
            
           <Typography component="h1" variant="h5">
             Add Product

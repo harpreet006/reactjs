@@ -1,5 +1,6 @@
 const {connection} = require('../services/db');
 const Product = require('../models/Product');
+var slug = require('slug')
 const ProductModel= new Product();
 /**
 * This function will show address form.
@@ -7,23 +8,41 @@ const ProductModel= new Product();
 
 exports.addProduct = async (req,res,next) => {
 	const productName=req.body.productName;
+    const productSlug=slug(productName);
 	const productModel=req.body.productModel;
 	const productPrice=req.body.productPrice;
 	const productimage=req.file.filename;
     // console.log(req.userId,productName,productModel,productPrice,productimage)
-    if(req.userId){
-        connection.query(ProductModel.addProducts(req.userId,productName,productModel,productPrice,productimage), (err,result) => {
-            if(err)
-                console.log(err);
-            if(result){
-                res.json({status:"success",message:"User successfully created"});
+    if(req.userId){        
+        connection.query(ProductModel.SlugExist(productSlug), (err,slugExist) => {
+            if(slugExist && slugExist[0]==undefined){
+                connection.query(ProductModel.addProducts(req.userId,productName,productSlug,productModel,productPrice,productimage), (err,result) => {
+                    if(err)
+                        res.json({status:"error",message:"something went wrong !"});
+                    if(result){
+                        res.json({status:"success",message:"User successfully created"});
+                    }else{
+                        res.json({status:"error",message:"something went wrong !"});
+                    }
+                });
             }else{
-                res.json({status:"error",message:"something went wrong !"});
+                res.json({status:"error",message:"Already Exist"});
             }
-        });
+        })
+       
     }
 }
 
+exports.singleProduct = async (req,res,next) => {
+    const userId=req.userId;
+    connection.query(ProductModel.SlugExist(req.query.slug), (err,result) => {
+        if(result && result[0] !=undefined){
+            res.json({status:'success',result:result[0],message:''});
+        }else{
+            res.json({status:"error",result:null,message:"There is some problem"});
+        }
+    })
+}
 
 
 exports.productRemove = async (req,res,next) => {

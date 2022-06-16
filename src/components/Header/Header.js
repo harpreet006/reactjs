@@ -9,6 +9,7 @@ import ContactUs from '../containers/ContactUs';
 import AddProduct from '../containers/products/AddProduct';
 import HomePage from '../containers/LandingPage/HomePage';
 import ProductListing from '../containers/products/ProductListing';
+import SingleProduct from '../containers/products/SingleProduct';
 import UserList from '../containers/UserList';
 import Blog from '../containers/Blog';
 import NoPage from '../containers/Nopage';
@@ -36,10 +37,11 @@ function Header() {
         <Protected path="/Signup" component={Signup}  type="public"  roles={['Admin','User']} breadcrumb="Signup" />
         <Protected path="/Login" component={SignIn} type="public" roles={['Admin','User']} breadcrumb="Login" />       
         <Protected path="/Add-Product" component={AddProduct} type="private" breadcrumb="Add-Product" />   
-         <Protected path="/Products" component={ProductListing} type="private" breadcrumb="Products" />
+        <Protected exact path="/Products/:slug" component={SingleProduct} type="private" breadcrumb="SingleProduct" />
+        <Protected exact path="/Products" component={ProductListing} type="private" breadcrumb="Products" />
         <Protected path="/Forgot-password" component={ForgotPasswordFun} type="public"  isAuthUser={localToken}  roles={['Admin','User']} breadcrumb="Forgot-password" />)
-          <Route path="/" component={HomePage} roles={['Admin','User']}  breadcrumb="Home" />
-          <Route path="*" component={NoPage}  />
+        <Route exact path="/" component={HomePage} roles={['Admin','User']}  breadcrumb="Home" />
+        <Route path="*" component={NoPage}  />
       </Switch>
     </Router>
     </>
