@@ -5,7 +5,7 @@ import Footer from '../Footer/Footer';
 function Layout() {
   return (
     <>
-      <Header />      
+      <Header /> 
          
       <Footer />
     </>

@@ -17,7 +17,7 @@ import Container from '@mui/material/Container';
 import { RegisterUser } from '../services/Services';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const Home = () => {
+const Signup = () => {
   const theme = createTheme();
   const [firstName,setFirstName]= useState('');
   const [lastName,setLastName]= useState('');
@@ -182,4 +182,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Signup;

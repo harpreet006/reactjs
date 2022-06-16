@@ -1,5 +1,6 @@
 import React,{ useEffect, useState } from "react";
-import Main from '../Layout/Main'
+import { useHistory } from "react-router-dom";
+import Main from '../../Layout/Main'
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,29 +15,35 @@ import Collapse from '@mui/material/Collapse';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import LoadingSpinner from '../../Helper/LoadingSpinner';
 import imageCompression from 'browser-image-compression';
-import { ProductAdd ,fileUploadToServer} from '../services/Services';
+import { ProductAdd ,fileUploadToServer} from '../../services/Services';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 // var FormData = require('form-data');
 const AddProduct = () => {
   const theme = createTheme();
+  const history = useHistory();
   const [productName,setProductName]= useState('');
   const [productModel,setProductModel]= useState('');
   const [productPrice,setProductPrice]= useState('');
   const [productimage,setProductimage]= useState('');
+  const [imageset,setImageset]= useState(false);
   const [fielderror,setFielderror]= useState('');
   const [success,setSuccess]= useState('');
+  const [spinner,setSpinner]= useState(false);
   const [msgdisplay,setMsgdisplay] = useState(false);
   
   const saveFile =(e) =>{
-    console.log(e.target.files[0].name)
-
-    setProductimage(e.target.files[0])
+    // console.log(e.target.files[0].name);
+    setProductimage(e.target.files[0]);
+    setImageset(true); // set image is exist
+    setFielderror({productimage:""}); // after upload imae remove error message
   }
 
    
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // return false;
     const header=localStorage.getItem('token');
     const object={
       productName: productName,
@@ -44,46 +51,52 @@ const AddProduct = () => {
       productPrice: productPrice,
       productimage: productimage
     };
-
+    if(object.productName==""){
+      setFielderror({productName:"Required field"});
+      return false;
+    }
+    if(object.productModel==""){
+      setFielderror({productModel:"Required field"});
+      return false;
+    }
+    if(object.productPrice==""){
+      setFielderror({productPrice:"Required field"});
+      return false;
+    }
+    if(imageset==false){
+      setFielderror({productimage:"Required field"});
+      return false;
+    }
+  setSpinner(true);
   console.log('originalFile instanceof Blob', object.productimage instanceof Blob); // true
   console.log(`originalFile size ${object.productimage.size / 1024 / 1024} MB`);
   try {
     // console.log(object.productimage,"******")
-    const compressedFile = await imageCompression(object.productimage,);
-    // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-    // console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
-    // console.log(compressedFile,"*********");
+    const compressedFile = await imageCompression(object.productimage);
     const token=localStorage.getItem('token');
     const formData = new FormData()
     formData.append('selectedFile', compressedFile)
-    // console.log(compressedFile,"uploadToServer")
-    await fileUploadToServer(token,formData); // write your own logic
+    formData.append('productName', object.productName)
+    formData.append('productModel', object.productModel)
+    formData.append('productPrice', object.productPrice)
+    // return false;
+    fileUploadToServer(token,formData,(responce)=>{
+      setMsgdisplay(true)
+      if(responce.status=="success"){
+        // console.log("jksdfas")
+        setSuccess(responce.message)
+        history.push('/Products');
+      }else{
+        setSuccess(responce.message);
+      }
+    });
   } catch (error) {
       console.log(error);
   }
-
- return false
-    // formData.append('file', productimage)
-    ProductAdd(header , object,(responce)=>{
-      if(responce.error && responce.error !=""){       
-          setFielderror(responce.error[0]);
-          setMsgdisplay(false);
-          // console.log(error)
-        }
-        // console.log(success,"****");
-        if(responce.success && responce.success){         
-          setSuccess(responce.success);
-          setMsgdisplay(true);
-          console.log(responce,"*****")
-          setFielderror('');
-        }
-    });
-
   };
   return (
     <Main>
-      <>
-      <Container component="main" maxWidth="sm">
+      <>{spinner && spinner?(<LoadingSpinner />):(<Container component="main" maxWidth="sm">
         <CssBaseline />
         <Box
           sx={{
@@ -106,13 +119,13 @@ const AddProduct = () => {
                   error ={fielderror.productName && fielderror.productName?true:false}  
                   autoComplete="given-name"
                   name="productName"
-                  value={productName}
                   required
                   fullWidth
                   id="productName"
                   helperText={fielderror.productName && fielderror.productName}
-                  onChange={(event, value) => {   
-                    setProductName(event.target.value.trim())
+                  onChange={(event, value) => {
+                    let eventAct=event.target.value.trim();
+                    setProductName(eventAct)
                   }}
                   label="Product Name"
                   autoFocus
@@ -173,7 +186,7 @@ const AddProduct = () => {
             </Button>             
           </Box>
         </Box>         
-      </Container>
+      </Container>)}      
     </>
     </Main>
   );

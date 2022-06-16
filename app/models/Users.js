@@ -9,7 +9,7 @@ class Users{
 		return sql;
 	}
 	getUsers(){
-		let sql = `SELECT * FROM users`;
+		let sql = `SELECT * FROM users ORDER BY id DESC`;
 		return sql;
 	}
 

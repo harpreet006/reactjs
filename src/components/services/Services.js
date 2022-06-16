@@ -36,11 +36,19 @@ export async function RegisterUser(params,callback) {
 }
 
 
-export async  function fileUploadToServer(header,compressedFile){
+export async  function fileUploadToServer(header,compressedFile,callback){
     const AuthStr = 'Bearer ' + header;
-    return axios.post(base_Url+'fileUpload', compressedFile, {
-       headers: { 'authorization':AuthStr }
-    });
+    await axios.post(base_Url+'fileUpload',compressedFile ,{
+        headers: { 'Content-Type': 'application/json','authorization':AuthStr }
+    }).then(response =>{
+        if(response.data.status="success"){
+            callback({'status':response.data.status,'message':response.data.message});
+        }else{
+            callback({'status':response.data.status,'message':response.data.message});
+        }
+    }).catch(err =>{
+        callback({'status':'error','message':"Something went wrong"});
+    })
 }
 
 
@@ -57,16 +65,14 @@ export async function ProductAdd(header,params,callback) {
         callback({'error':[{productPrice:"Please enter product price"}]});
         return false;
     }
-    console.log(params);
-    // return false;
     const AuthStr = 'Bearer ' + header;
     await axios.post(base_Url+'addproduct', params, {
        headers: { 'Content-Type': 'multipart/form-data','authorization':AuthStr }
     }).then(response =>{
 
-        callback({'success':response.data.success});
+        // callback({'success':response.data.success});
     }).catch(err =>{
-        callback({'error':err});
+        // callback({'error':err});
         console.log(err);
     })
 }
@@ -83,6 +89,34 @@ export async function GetUserList(header,callback) {
     })
 }
 
+export async function ViewProduct(header,userId,callback) {
+    const AuthStr = 'Bearer ' + header;
+    console.log(AuthStr)
+    // console.log(userId)
+   /* await axios.get(base_Url+'getusers', {
+        headers: { 'Content-Type': 'application/json','authorization':AuthStr }
+    }).then(response =>{
+        callback({'success':response.data.success});
+    }).catch(err =>{
+        callback({'error':err});
+        console.log(err);
+    })*/
+}
+
+export async function GetProductList(header,callback) {
+    const AuthStr = 'Bearer ' + header;
+    await axios.get(base_Url+'getproducts', {
+        headers: { 'Content-Type': 'application/json','authorization':AuthStr }
+    }).then(response =>{
+        callback({'result':response.data.result});
+    }).catch(err =>{
+        callback({'error':err});
+        console.log(err);
+    })
+}
+
+
+
 
 export async function DeleteUser(header,userId,callback) {
     const AuthStr = 'Bearer ' + header;
@@ -95,6 +129,21 @@ export async function DeleteUser(header,userId,callback) {
         console.log(err);
     })
 }
+
+
+export async function DeleteProduct(header,userId,callback) {
+    const AuthStr = 'Bearer ' + header;
+    await axios.post(base_Url+'deleteProduct',userId, {
+        headers: { 'Content-Type': 'application/json','authorization':AuthStr }
+    }).then(response =>{
+        callback({'success':response.data.success,'message':response.data.message});
+    }).catch(err =>{
+        callback({'error':err});
+        console.log(err);
+    })
+}
+
+
 
 
 

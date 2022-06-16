@@ -21,8 +21,8 @@ function Navbar() {
 	const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const getStorage=localStorage.getItem('token')
-  const pages = localStorage.getItem('token')?['About','Blog', 'Contact']:['About','Blog', 'Contact'];
-  const settings = localStorage.getItem('token')?['Profile','dashboard','Logout']:['Login'];
+  const pages = localStorage.getItem('token')?['About','Blog', 'Contact']:['Home','About','Blog', 'Contact'];
+  const settings = localStorage.getItem('token')?['Profile','dashboard','Add-Product','Logout']:['Login'];
 
   const handleOpenNavMenu = (event) => {
   	// alert("open")
@@ -42,7 +42,7 @@ function Navbar() {
   const logouttrigger =(event)=>{
     event.preventDefault();
     localStorage.clear();
-    history.push('/login')
+    history.push('/Login')
   }
   useEffect(()=>{
 
