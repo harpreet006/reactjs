@@ -27,10 +27,11 @@ class Users{
 		return sql;
 	}
 
-	
-	
-
-	
+	userRole(userId){
+		let sql = `SELECT * FROM users WHERE id=${userId}`;
+		return sql;
+	}
 	
 }
+
 module.exports = Users;

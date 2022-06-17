@@ -9,5 +9,6 @@ router.post('/adduser', userController.registerForm);
 router.post('/deleteUser',verifyToken, userController.deleteUser);//checkAuth middleware
 router.post('/userLogin', userController.userLogin);
 router.post('/forgotPassword', userController.forgotPassword);
+router.get('/getRole',verifyToken, userController.getRole);
 
 module.exports = router;

@@ -35,6 +35,22 @@ export async function RegisterUser(params,callback) {
     })
 }
 
+export async function CurrentRole(header,callback) {
+    const AuthStr = 'Bearer ' + header;
+    await axios.get(base_Url+'getRole',{
+        headers: { 'Content-Type': 'application/json','authorization':AuthStr }
+    }).then(response =>{
+        console.log(response);
+        if(response.data.status=="success"){
+            callback({'status':response.data.status,'result':response.data.result});
+        }else{
+            callback({'status':response.data.status,'result':'','message':response.data.message});
+        }
+    }).catch(err =>{
+        // callback({'status':'error','message':"Something went wrong"});
+    })
+    // return "sdfsdf";
+}
 
 export async  function fileUploadToServer(header,compressedFile,callback){
     const AuthStr = 'Bearer ' + header;

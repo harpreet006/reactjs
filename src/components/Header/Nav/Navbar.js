@@ -45,7 +45,7 @@ function Navbar() {
     history.push('/Login')
   }
   useEffect(()=>{
-
+    
   })
   return (
   	<>
@@ -157,7 +157,7 @@ function Navbar() {
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">
-                    {setting=="Logout"?(<Link onClick={logouttrigger} to={setting}>{setting}</Link>):(<Link to={setting}>{setting}</Link>)}
+                    {setting=="Logout"?(<Link onClick={logouttrigger} to={setting}>{setting}</Link>):(<Link to={'/'+setting}>{setting}</Link>)}
                     
                   </Typography>
                 </MenuItem>

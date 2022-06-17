@@ -1,4 +1,5 @@
 import React , { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { useConfirm } from 'material-ui-confirm';
 import Main from '../Layout/Main';
 import Button from '@mui/material/Button';
@@ -6,13 +7,16 @@ import Link from '@mui/material/Link';
 import { DataGrid } from '@mui/x-data-grid'; 
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
-import { GetUserList, DeleteUser } from '../services/Services';
+import { GetUserList, DeleteUser ,CurrentRole} from '../services/Services';
 
-const UserList = ()=> {
+const UserList = (props)=> {
+  console.log(props.roles,"dfdfdf");
+    const history = useHistory();
   const [row,setRow] = useState([]);
    const confirm = useConfirm();
   const [showmsg,setShowmsg] = useState('');
   const [loading,setLoading] = useState(false);
+  const [rolePremission,setRolePremission] = useState(false);
   const [msgdisplay,setMsgdisplay] = useState(false);
   const [open,setOpen] = useState(true);
   const columns = [
@@ -81,6 +85,15 @@ const UserList = ()=> {
   };
 
   useEffect(() => {
+    CurrentRole(tokenItem, (res)=>{
+      console.log(res.result,"res");
+      if(res.result =="User")
+      {
+        setRolePremission(false);
+      }else{
+        setRolePremission(true);
+      }
+    })
     GetUserList(tokenItem, (responce)=>{
       if(responce.success && responce.success){
         console.log(responce.success,"12*****")
@@ -95,7 +108,7 @@ const UserList = ()=> {
     <>    
     <Collapse in={msgdisplay}>
     {showmsg && showmsg?(<Alert  onClose={() => setMsgdisplay(false)} severity="success">{showmsg && showmsg}</Alert>):''}</Collapse></>
-     <div style={{ height: 400, width: '100%' }}>      
+     {rolePremission?(<div style={{ height: 400, width: '100%' }}>      
       <DataGrid
         rows={row}
         columns={columns}
@@ -103,7 +116,8 @@ const UserList = ()=> {
         rowsPerPageOptions={[5]}
         loading={loading}
       />
-    </div>
+    </div>):('Sorry You have limited premission')}
+     
     </Main>
   );
 }

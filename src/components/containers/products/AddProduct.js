@@ -17,12 +17,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import LoadingSpinner from '../../Helper/LoadingSpinner';
 import imageCompression from 'browser-image-compression';
-import { ProductAdd ,fileUploadToServer} from '../../services/Services';
+import { ProductAdd ,fileUploadToServer ,CurrentRole} from '../../services/Services';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 // var FormData = require('form-data');
 const AddProduct = () => {
   const theme = createTheme();
   const history = useHistory();
+  const [rolePremission,setRolePremission] = useState(false);
   const [productName,setProductName]= useState('');
   const [productModel,setProductModel]= useState('');
   const [productPrice,setProductPrice]= useState('');
@@ -41,7 +42,7 @@ const AddProduct = () => {
     setFielderror({productimage:""}); // after upload imae remove error message
   }
 
-   
+  const token=localStorage.getItem('token');
   const handleSubmit = async (event) => {
       event.preventDefault();
       // return false;
@@ -73,8 +74,7 @@ const AddProduct = () => {
       console.log(`originalFile size ${object.productimage.size / 1024 / 1024} MB`);
     try {
       // console.log(object.productimage,"******")
-      const compressedFile = await imageCompression(object.productimage);
-      const token=localStorage.getItem('token');
+      const compressedFile = await imageCompression(object.productimage);      
       const formData = new FormData()
       formData.append('selectedFile', compressedFile)
       formData.append('productName', object.productName)
@@ -97,8 +97,21 @@ const AddProduct = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    CurrentRole(token, (res)=>{
+      console.log(res.result,"res");
+      if(res.result =="User")
+      {
+        setRolePremission(false);
+      }else{
+        setRolePremission(true);
+      }
+    });    
+  }, []);
+
   return (
-    <Main>
+    <Main>{rolePremission?(
       <>{spinner && spinner?(<LoadingSpinner />):(<Container component="main" maxWidth="sm">
         <CssBaseline />
         <Box
@@ -110,8 +123,8 @@ const AddProduct = () => {
           }}
         >
         <><Collapse in={msgdisplay}>
-    {success && success?(<Alert  onClose={() => setMsgdisplay(false)} severity={severity}>{success && success}</Alert>):''}</Collapse></>
-           
+    }
+    {success && success?(<Alert  onClose={() => setMsgdisplay(false)} severity={severity}>{success && success}</Alert>):''}</Collapse></>           
           <Typography component="h1" variant="h5">
             Add Product
           </Typography>
@@ -190,7 +203,7 @@ const AddProduct = () => {
           </Box>
         </Box>         
       </Container>)}      
-    </>
+    </>):("Sorry You have limited premission")}
     </Main>
   );
 };

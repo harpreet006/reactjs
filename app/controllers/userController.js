@@ -31,6 +31,17 @@ exports.registerForm = async (req,res,next) => {
 }
 
 
+exports.getRole = async (req,res,next) => {
+    connection.query(userModel.userRole(req.userId), (err,result) => {
+        if(err)
+            res.json({error:"error",result:'',message:"Something wrong"})
+        if(result.length){
+            res.json({status:"success",result:result[0].role,message:""});
+        }else{
+            res.json({status:"error",result:'',message:"Something wrong"});
+        }
+    })
+}
 
 exports.userLogin = async (req,res,next) => {
     connection.query(userModel.userLogin(req.body.email), (err,result) => {

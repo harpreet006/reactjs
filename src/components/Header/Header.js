@@ -1,4 +1,4 @@
-import React ,{useEffect} from 'react';
+import React ,{useEffect,useState} from 'react';
 import About from '../containers/About';
 import SignIn from '../containers/SignIn';
 import ForgotPasswordFun from '../containers/ForgotPassword';
@@ -15,31 +15,34 @@ import Blog from '../containers/Blog';
 import NoPage from '../containers/Nopage';
 import Navbar from './Nav/Navbar';
 import Protected from '../AuthProtected/Protected';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+
+
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";  
 
 function Header() {
   const localToken=localStorage.getItem('token');
 	useEffect (()=>{
-    // alert(localToken)
+    
   })
   return (
   	<>
   	<Router>
       <Navbar />    
-      <Switch>  
-        
+      <Switch>        
         <Route path="/About" component={About} roles={['Admin','User']}  breadcrumb="About" />
         <Route path="/Blog" component={Blog}  roles={['Admin','User']} breadcrumb="Blog" />
         <Route path="/Contact" component={ContactUs}  />        
         <Protected path="/Profile" component={Profile} type="private" roles={['Admin','User']} breadcrumb="Profile"  />
-        <Protected path="/dashboard" component={UserList} type="private" roles={['Admin']} breadcrumb="Dashboard"  /> 
+        <Protected path="/dashboard"    > 
+        <UserList type="private"  roles='Admin' breadcrumb="Dashboard" />
+        </Protected>
         <Protected path="/Account" component={Account} type="private" roles={['Admin','User']} breadcrumb="Account" />
         <Protected path="/Signup" component={Signup}  type="public"  roles={['Admin','User']} breadcrumb="Signup" />
         <Protected path="/Login" component={SignIn} type="public" roles={['Admin','User']} breadcrumb="Login" />       
         <Protected path="/Add-Product" component={AddProduct} type="private" breadcrumb="Add-Product" />   
-        <Protected exact path="/Products/:slug" component={SingleProduct} type="private" breadcrumb="SingleProduct" />
-        <Protected exact path="/Products" component={ProductListing} type="private" breadcrumb="Products" />
-        <Protected path="/Forgot-password" component={ForgotPasswordFun} type="public"  isAuthUser={localToken}  roles={['Admin','User']} breadcrumb="Forgot-password" />)
+        <Protected exact path="/Products/:slug"  component={SingleProduct} type="private" breadcrumb="SingleProduct" />
+        <Protected exact path="/Products"  component={ProductListing} type="private" breadcrumb="Products" />
+        <Protected path="/Forgot-password"  component={ForgotPasswordFun} type="public"  isAuthUser={localToken}  roles={['Admin','User']} breadcrumb="Forgot-password" />)
         <Route exact path="/" component={HomePage} roles={['Admin','User']}  breadcrumb="Home" />
         <Route path="*" component={NoPage}  />
       </Switch>
